@@ -64,8 +64,8 @@ class BuildMonitor:
             label = Label(self.root, textvariable=var, relief=RAISED, bg=col, width=73, height=3, font=("Helvetica", 17))
             self.buildLabels[r - 1][c - 1] = label
         else:
-            # else update label text
-            label.config(text=var)
+            # else update label text and color
+            label.config(textvariable=var, bg=col)
         label.grid(row=r, column=c)
 
     def create_labels(self, name, results, date_info, row_index):
