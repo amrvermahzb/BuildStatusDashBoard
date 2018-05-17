@@ -8,11 +8,9 @@ BUILD_BASE_PATH = r'\\code1.emi.philips.com\storage\IGTS_WIP_Storage'
 
 def latest_unit_build_info(unit):
     path_ci = build_path(unit, "\CIBuilds\\")
-    path_ext_cvt = build_path(unit, "\ExtendedCIBuilds\\")
-    path_ext_cvg = build_path(unit, "\ExtendedCIBuilds\\", "_Coverage")
+    path_ext = build_path(unit, "\ExtendedCIBuilds\\", "_Coverage")
     return latest_build_date_and_path(path_ci), \
-           latest_build_date_and_path(path_ext_cvt), \
-           latest_build_date_and_path(path_ext_cvg)
+           latest_build_date_and_path(path_ext)
 
 
 def build_path(unit, build_type, post_fix=""):

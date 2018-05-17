@@ -18,17 +18,12 @@ def get_build_result(filename):
 
 def get_build_dates_info(dates):
     date_ci = dates[0]
-    date_ext_cvt = dates[1]
-    date_ext_cvg = dates[2]
-    days_ago_cvt = -1
-    days_ago_cvg = -1
-    if date_ci != "" and date_ext_cvt != "":
-        time_delta = date_ext_cvt - date_ci
-        days_ago_cvt = time_delta.days
-    if date_ci != "" and date_ext_cvg != "":
-        time_delta = date_ext_cvg - date_ci
-        days_ago_cvg = time_delta.days
-    return date_ci, date_ext_cvt, days_ago_cvt, date_ext_cvg, days_ago_cvg
+    date_ext = dates[1]
+    days_ago_ext = -1
+    if date_ci != "" and date_ext != "":
+        time_delta = date_ext - date_ci
+        days_ago_ext = time_delta.days
+    return date_ci, date_ext, days_ago_ext
 
 
 class BuildMonitor:
@@ -36,7 +31,7 @@ class BuildMonitor:
         self.units = ["Acq", "AUI", "FSSys", "HostSW", "IDClient", "Infra", "IPSW", "SETool", "UI", "UIM", "View",
                       "VxW"]
         self.numUnits = 12
-        self.numBuildTypes = 3
+        self.numBuildTypes = 2
         self.buildLabels = [[0] * self.numBuildTypes for i in range(self.numUnits)]
 
         self.root = Tk()
@@ -66,7 +61,7 @@ class BuildMonitor:
         label = self.buildLabels[r-1][c-1]
         if label == 0:
             # create label only at first time
-            label = Label(self.root, textvariable=var, relief=RAISED, bg=col, width=43, height=3, font=("Helvetica", 17))
+            label = Label(self.root, textvariable=var, relief=RAISED, bg=col, width=73, height=3, font=("Helvetica", 17))
             self.buildLabels[r - 1][c - 1] = label
         else:
             # else update label text
@@ -74,9 +69,11 @@ class BuildMonitor:
         label.grid(row=r, column=c)
 
     def create_labels(self, name, results, date_info, row_index):
-        self.create_label(name + " CIBuild", results[0], date_info[0], 0, row_index, 1)
-        self.create_label(name + " Coverity", results[1], date_info[1], date_info[2], row_index, 2)
-        self.create_label(name + " Coverage", results[2], date_info[3], date_info[4], row_index, 3)
+        date_ci = date_info[0]
+        date_ext = date_info[1]
+        days_ago_ext = date_info[2]
+        self.create_label(name + " CIBuild", results[0], date_ci, 0, row_index, 1)
+        self.create_label(name + " Extended", results[1], date_ext, days_ago_ext, row_index, 2)
 
     def update(self):
         row = 1
