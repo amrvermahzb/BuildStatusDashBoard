@@ -70,12 +70,12 @@ class BuildMonitor:
         label = self.buildLabels[r-1][c-1]
         if label == 0:
             # create label only at first time
-            label = Label(self.root, textvariable=var, relief=RAISED, bg=col, image=imageref, compound="left", width=900, height=70, font=("Helvetica", 17))
+            label = Label(self.root, textvariable=var, relief=RAISED, bg=col, image=imageref, compound="left", anchor='w', width=950, height=77, font=("Helvetica", 17))
             self.buildLabels[r - 1][c - 1] = label
         else:
             # else update label text and color
             label.config(textvariable=var, bg=col, image=imageref)
-        label.grid(row=r, column=c)
+        label.grid(row=r, column=c, sticky='WENS')
 
     def create_labels(self, name, results, date_info, row_index):
         date_ci = date_info[0]
