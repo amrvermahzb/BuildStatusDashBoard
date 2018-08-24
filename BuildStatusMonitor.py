@@ -30,7 +30,7 @@ class BuildMonitor:
     def __init__(self):
         self.units = ["Acq", "AUI", "FSSys", "HostSW", "IDClient", "Infra", "IPSW", "SETool", "UI", "UIM", "View",
                       "VxW"]
-        self.numUnits = 12
+        self.numUnits = len(self.units)
         self.numBuildTypes = 2
         self.buildLabels = [[0] * self.numBuildTypes for i in range(self.numUnits)]
 
