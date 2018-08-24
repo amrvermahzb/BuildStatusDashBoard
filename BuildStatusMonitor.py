@@ -39,6 +39,7 @@ class BuildMonitor:
         self.root.geometry("%dx%d+0+0" % (w, h))
         self.redimg = PhotoImage(file="red.gif")
         self.greenimg = PhotoImage(file="green.gif")
+        self.blueimg = PhotoImage(file="blue.gif")
 
         self.update()
         self.root.mainloop()
@@ -65,6 +66,7 @@ class BuildMonitor:
             col = "grey"
         elif result == "not available":
             col = "blue"
+            imageref = self.blueimg
         label = self.buildLabels[r-1][c-1]
         if label == 0:
             # create label only at first time
