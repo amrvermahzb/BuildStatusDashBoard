@@ -37,8 +37,13 @@ class BuildMonitor:
         self.root = Tk()
         w, h = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         self.root.geometry("%dx%d+0+0" % (w, h))
+        self.redimg = PhotoImage(file="red.gif")
+        self.greenimg = PhotoImage(file="green.gif")
+
         self.update()
         self.root.mainloop()
+
+
 
     def create_label(self, part, result, date_, days_ago, r, c):
         text_date = date_.__str__()
@@ -51,9 +56,11 @@ class BuildMonitor:
 
         var = StringVar()
         var.set(text)
+        imageref=self.redimg
         col = "red"
         if result == "successful":
             col = "green"
+            imageref = self.greenimg
         elif result == "not found":
             col = "grey"
         elif result == "not available":
@@ -61,11 +68,11 @@ class BuildMonitor:
         label = self.buildLabels[r-1][c-1]
         if label == 0:
             # create label only at first time
-            label = Label(self.root, textvariable=var, relief=RAISED, bg=col, width=73, height=3, font=("Helvetica", 17))
+            label = Label(self.root, textvariable=var, relief=RAISED, bg=col, image=imageref, compound="left", width=900, height=70, font=("Helvetica", 17))
             self.buildLabels[r - 1][c - 1] = label
         else:
             # else update label text and color
-            label.config(textvariable=var, bg=col)
+            label.config(textvariable=var, bg=col, image=imageref)
         label.grid(row=r, column=c)
 
     def create_labels(self, name, results, date_info, row_index):
@@ -103,6 +110,5 @@ class BuildMonitor:
 
         # refresh only once every 5 minutes
         self.root.after(300000, self.update)
-
 
 monitor = BuildMonitor()
