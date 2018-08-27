@@ -49,9 +49,9 @@ class BuildMonitor:
     def create_label(self, part, result, date_, days_ago, r, c):
         text_date = date_.__str__()
         if text_date != "":
-            text = part + " " + result + " (" + text_date + ")"
+            text = "    " + part + " " + result + " (" + text_date + ")"
             if days_ago < 0:
-                text = text + " *****"
+                text = text + " <<overdue>>"
         else:
             text = part + " " + result
 
