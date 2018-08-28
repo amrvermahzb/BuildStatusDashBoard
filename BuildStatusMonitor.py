@@ -41,22 +41,25 @@ class BuildMonitor(Frame):
         self.grid(sticky=W+E+N+S)
         self.units = ["Acq", "AUI", "FSSys", "HostSW", "IDClient", "Infra", "IPSW", "SETool", "UI", "UIM", "View",
                       "VxW"]
-        self.numUnits = 12
+        self.numUnits = len(self.units)
         self.numBuildTypes = 2
         self.buildLabels = [[0] * self.numBuildTypes for i in range(self.numUnits)]
         self.update()
 
+
+
     def create_label(self, part, result, date_, days_ago, r, c):
         text_date = date_.__str__()
         if text_date != "":
-            text = part + " " + result + " (" + text_date + ")"
+            text = "    " + part + " " + result + " (" + text_date + ")"
             if days_ago < 0:
-                text = text + " *****"
+                text = text + " <<overdue>>"
         else:
             text = part + " " + result
 
         var = StringVar()
         var.set(text)
+        imageref=self.redimg
         col = "red"
         imageref = self.redcrossimage
         if result == "successful":
