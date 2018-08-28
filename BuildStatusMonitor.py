@@ -59,7 +59,6 @@ class BuildMonitor(Frame):
 
         var = StringVar()
         var.set(text)
-        imageref=self.redimg
         col = "red"
         imageref = self.redcrossimage
         if result == "successful":
