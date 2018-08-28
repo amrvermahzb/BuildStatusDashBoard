@@ -1,5 +1,5 @@
-from tkinter import *
-from datetime import *
+import tkinter as tk
+import datetime as dt
 import GetBuildStatus
 import os.path
 import time
@@ -26,19 +26,19 @@ def get_build_dates_info(dates):
     return date_ci, date_ext, days_ago_ext
 
 
-class BuildMonitor(Frame):
+class BuildMonitor(tk.Frame):
 
     def __init__(self, master=None):
-        Frame.__init__(self, master)
+        tk.Frame.__init__(self, master)
 
-        self.checkimage = PhotoImage(file="check_mark_70x70.png")
-        self.questionimage = PhotoImage(file="question_mark_70x70.png")
-        self.redcrossimage = PhotoImage(file="red_cross_70x70.png")
-        self.runningimage = PhotoImage(file="run_70x70.png")
+        self.checkimage = tk.PhotoImage(file="check_mark_70x70.png")
+        self.questionimage = tk.PhotoImage(file="question_mark_70x70.png")
+        self.redcrossimage = tk.PhotoImage(file="red_cross_70x70.png")
+        self.runningimage = tk.PhotoImage(file="run_70x70.png")
         
         self.master.rowconfigure(0, weight=1)
         self.master.columnconfigure(0, weight=1)
-        self.grid(sticky=W+E+N+S)
+        self.grid(sticky=tk.W+tk.E+tk.N+tk.S)
         self.units = ["Acq", "AUI", "FSSys", "HostSW", "IDClient", "Infra", "IPSW", "SETool", "UI", "UIM", "View",
                       "VxW"]
         self.numUnits = len(self.units)
@@ -57,7 +57,7 @@ class BuildMonitor(Frame):
         else:
             text = part + " " + result
 
-        var = StringVar()
+        var = tk.StringVar()
         var.set(text)
         col = "red"
         imageref = self.redcrossimage
@@ -73,14 +73,14 @@ class BuildMonitor(Frame):
         label = self.buildLabels[r-1][c-1]
         if label == 0:
             # create label only at first time
-            label = Label(self, textvariable=var, anchor=W, padx=20, compound=LEFT, relief=RAISED, bg=col, image=imageref, font=('Helvetica', 17, 'bold'))
+            label = tk.Label(self, textvariable=var, anchor=tk.W, padx=20, compound=tk.LEFT, relief=tk.RAISED, bg=col, image=imageref, font=('Helvetica', 17, 'bold'))
             self.buildLabels[r - 1][c - 1] = label
         else:
             # else update label text and color
             label.config(textvariable=var, bg=col, image=imageref)
         self.rowconfigure(r, weight=1)
         self.columnconfigure(c, weight=1)
-        label.grid(row=r, column=c, sticky=W+E+N+S)
+        label.grid(row=r, column=c, sticky=tk.W+tk.E+tk.N+tk.S)
         
     def create_labels(self, name, results, date_info, row_index):
         date_ci = date_info[0]
@@ -101,7 +101,7 @@ class BuildMonitor(Frame):
                 if build_date == "<nodate>":
                     build_dates.append("")
                 else:
-                    build_dates.append(datetime.strptime(build_date, "%Y-%m-%d").date())
+                    build_dates.append(dt.datetime.strptime(build_date, "%Y-%m-%d").date())
                 if path == "<nopath>":
                     build_results.append("not found")
                 else:
@@ -117,7 +117,7 @@ class BuildMonitor(Frame):
        
 
 def main():
-    root = Tk()
+    root = tk.Tk()
     root.state("zoomed") # Not portable; works on some platforms like Windows and macOS, want portable code use:  
                          # w, h = root.winfo_screenwidth(), root.winfo_screenheight() 
                          # root.geometry("%dx%d+0+0" % (w, h))
