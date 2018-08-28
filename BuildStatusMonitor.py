@@ -26,19 +26,25 @@ def get_build_dates_info(dates):
     return date_ci, date_ext, days_ago_ext
 
 
-class BuildMonitor:
-    def __init__(self):
+class BuildMonitor(Frame):
+
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+
+        self.checkimage = PhotoImage(file="check_mark_70x70.png")
+        self.questionimage = PhotoImage(file="question_mark_70x70.png")
+        self.redcrossimage = PhotoImage(file="red_cross_70x70.png")
+        self.runningimage = PhotoImage(file="run_70x70.png")
+        
+        self.master.rowconfigure(0, weight=1)
+        self.master.columnconfigure(0, weight=1)
+        self.grid(sticky=W+E+N+S)
         self.units = ["Acq", "AUI", "FSSys", "HostSW", "IDClient", "Infra", "IPSW", "SETool", "UI", "UIM", "View",
                       "VxW"]
         self.numUnits = 12
         self.numBuildTypes = 2
         self.buildLabels = [[0] * self.numBuildTypes for i in range(self.numUnits)]
-
-        self.root = Tk()
-        w, h = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
-        self.root.geometry("%dx%d+0+0" % (w, h))
         self.update()
-        self.root.mainloop()
 
     def create_label(self, part, result, date_, days_ago, r, c):
         text_date = date_.__str__()
@@ -52,22 +58,28 @@ class BuildMonitor:
         var = StringVar()
         var.set(text)
         col = "red"
+        imageref = self.redcrossimage
         if result == "successful":
             col = "green"
+            imageref = self.checkimage
         elif result == "not found":
             col = "grey"
+            imageref = self.questionimage
         elif result == "not available":
             col = "blue"
+            imageref = self.runningimage
         label = self.buildLabels[r-1][c-1]
         if label == 0:
             # create label only at first time
-            label = Label(self.root, textvariable=var, relief=RAISED, bg=col, width=73, height=3, font=("Helvetica", 17))
+            label = Label(self, textvariable=var, anchor=W, padx=20, compound=LEFT, relief=RAISED, bg=col, image=imageref, font=('Helvetica', 17, 'bold'))
             self.buildLabels[r - 1][c - 1] = label
         else:
             # else update label text and color
-            label.config(textvariable=var, bg=col)
-        label.grid(row=r, column=c)
-
+            label.config(textvariable=var, bg=col, image=imageref)
+        self.rowconfigure(r, weight=1)
+        self.columnconfigure(c, weight=1)
+        label.grid(row=r, column=c, sticky=W+E+N+S)
+        
     def create_labels(self, name, results, date_info, row_index):
         date_ci = date_info[0]
         date_ext = date_info[1]
@@ -78,7 +90,7 @@ class BuildMonitor:
     def update(self):
         row = 1
         now = time.strftime("(snapshot %A %B %d %H:%M)")
-        self.root.title("Allura R8.x.40 Build Status Monitor v3.0  " + now)
+        self.master.title("Allura R8.x.100 Build Status Monitor v3.1  " + now)
         for unit in self.units:
             build_info = GetBuildStatus.latest_unit_build_info(unit)
             build_results = []
@@ -100,9 +112,16 @@ class BuildMonitor:
             date_info = get_build_dates_info(build_dates)
             self.create_labels(unit, build_results, date_info, row)
             row = row + 1
+       
 
-        # refresh only once every 5 minutes
-        self.root.after(300000, self.update)
-
-
-monitor = BuildMonitor()
+def main():
+    root = Tk()
+    root.state("zoomed") # Not portable; works on some platforms like Windows and macOS, want portable code use:  
+                         # w, h = root.winfo_screenwidth(), root.winfo_screenheight() 
+                         # root.geometry("%dx%d+0+0" % (w, h))
+    monitor = BuildMonitor(master=root)
+    root.after(300000, monitor.update) # refresh only once every 5 minutes
+    root.mainloop()
+  
+if __name__ == '__main__':
+    main()
