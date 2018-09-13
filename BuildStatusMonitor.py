@@ -47,7 +47,6 @@ class BuildMonitor(tk.Frame):
         self.update()
 
 
-
     def create_label(self, part, result, date_, days_ago, r, c):
         text_date = date_.__str__()
         if text_date != "":
@@ -114,7 +113,9 @@ class BuildMonitor(tk.Frame):
             date_info = get_build_dates_info(build_dates)
             self.create_labels(unit, build_results, date_info, row)
             row = row + 1
-       
+
+        self.master.after(300000, self.update) # refresh only once every 5 minutes
+
 
 def main():
     root = tk.Tk()
@@ -122,7 +123,6 @@ def main():
                          # w, h = root.winfo_screenwidth(), root.winfo_screenheight() 
                          # root.geometry("%dx%d+0+0" % (w, h))
     monitor = BuildMonitor(master=root)
-    root.after(300000, monitor.update) # refresh only once every 5 minutes
     root.mainloop()
   
 if __name__ == '__main__':
