@@ -14,7 +14,7 @@ def latest_unit_build_info(unit):
 
 
 def build_path(unit, build_type, post_fix=""):
-    base_path = BUILD_BASE_PATH + build_type + unit + r'\Allura_Win10_' + unit
+    base_path = BUILD_BASE_PATH + build_type + unit + r'\Allura_Main_' + unit
     path = base_path + r'_PreInt' + post_fix
     if not os.path.isdir(path):
         path = base_path + r'_Int' + post_fix
