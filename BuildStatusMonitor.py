@@ -4,7 +4,6 @@ import GetBuildStatus
 import os.path
 import time
 
-
 def get_build_result(filename):
     with open(filename) as f:
         content = f.readlines()
@@ -31,10 +30,13 @@ class BuildMonitor(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
 
-        self.checkimage = tk.PhotoImage(file="check_mark_70x70.png")
-        self.questionimage = tk.PhotoImage(file="question_mark_70x70.png")
-        self.redcrossimage = tk.PhotoImage(file="red_cross_70x70.png")
-        self.runningimage = tk.PhotoImage(file="run_70x70.png")
+        checkimage = tk.PhotoImage(file="check_mark_70x70.png")
+        questionimage = tk.PhotoImage(file="question_mark_70x70.png")
+        redcrossimage = tk.PhotoImage(file="red_cross_70x70.png")
+        runningimage = tk.PhotoImage(file="run_70x70.png")
+
+        self.result_color = {"successful":"green", "not found":"grey", "not available":"blue", "failed":"red"}
+        self.result_image = {"successful":checkimage, "not found":questionimage, "not available":runningimage, "failed":redcrossimage}
         
         self.master.rowconfigure(0, weight=1)
         self.master.columnconfigure(0, weight=1)
@@ -56,27 +58,17 @@ class BuildMonitor(tk.Frame):
         else:
             text = part + " " + result
 
-        var = tk.StringVar()
-        var.set(text)
-        col = "red"
-        imageref = self.redcrossimage
-        if result == "successful":
-            col = "green"
-            imageref = self.checkimage
-        elif result == "not found":
-            col = "grey"
-            imageref = self.questionimage
-        elif result == "not available":
-            col = "blue"
-            imageref = self.runningimage
+        label_text = tk.StringVar()
+        label_text.set(text)
+
         label = self.buildLabels[r-1][c-1]
         if label == 0:
             # create label only at first time
-            label = tk.Label(self, textvariable=var, anchor=tk.W, padx=20, compound=tk.LEFT, relief=tk.RAISED, bg=col, image=imageref, font=('Helvetica', 17, 'bold'))
+            label = tk.Label(self, textvariable=label_text, anchor=tk.W, padx=20, compound=tk.LEFT, relief=tk.RAISED, bg=self.result_color[result], image=self.result_image[result], font=('Helvetica', 17, 'bold'))
             self.buildLabels[r - 1][c - 1] = label
         else:
             # else update label text and color
-            label.config(textvariable=var, bg=col, image=imageref)
+            label.config(textvariable=label_text, bg=self.result_color[result], image=self.result_image[result])
         self.rowconfigure(r, weight=1)
         self.columnconfigure(c, weight=1)
         label.grid(row=r, column=c, sticky=tk.W+tk.E+tk.N+tk.S)
