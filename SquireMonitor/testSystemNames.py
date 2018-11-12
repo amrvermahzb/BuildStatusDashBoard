@@ -10,3 +10,4 @@ class TestSystemNames(Enum):
 	Squire7 = 7
 	Squire8 = 8
 	Squire9 = 9
+	BV2 = 10

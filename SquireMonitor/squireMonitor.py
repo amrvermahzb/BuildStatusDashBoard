@@ -1,15 +1,18 @@
 from testSystem import TestSystem
 from testSystemNames import TestSystemNames
+from testSets import TestSets
+
 
 class SquireMonitor:
 	def __init__(self):
 		self.testSystems = []
-		self.testSystems.append(TestSystem(TestSystemNames.Squire1))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire2))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire3))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire4))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire5))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire6))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire7))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire8))
-		self.testSystems.append(TestSystem(TestSystemNames.Squire9))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire1, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire2, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire3, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire4, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire5, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire6, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire7, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire8, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.Squire9, TestSets.get_squire_test_set()))
+		self.testSystems.append(TestSystem(TestSystemNames.BV2, TestSets.get_continuous_integration_test_set()))
