@@ -1,7 +1,7 @@
 from squireTestResult import SquireTestResult
-from nonSquireTestResult import NonSquireTestResult
-from testNames import TestNames
-from testSystemNames import TestSystemNames
+from continuousIntegrationTestResult import ContinuousIntegrationTestResult
+from tests import Tests
+from testSystems import TestSystems
 
 
 class TestSystem:
@@ -16,23 +16,15 @@ class TestSystem:
             if self.is_squire_system(self.name):
                 self.testResults.append(SquireTestResult(self.name, testName))
             else:
-                self.testResults.append(NonSquireTestResult(self.name, testName))
+                self.testResults.append(ContinuousIntegrationTestResult(self.name, testName))
 
     @staticmethod
     def is_squire_system(systemName):
-        return (systemName == TestSystemNames.Squire1 or
-                systemName == TestSystemNames.Squire2 or
-                systemName == TestSystemNames.Squire3 or
-                systemName == TestSystemNames.Squire4 or
-                systemName == TestSystemNames.Squire5 or
-                systemName == TestSystemNames.Squire6 or
-                systemName == TestSystemNames.Squire7 or
-                systemName == TestSystemNames.Squire8 or
-                systemName == TestSystemNames.Squire9)
+        return systemName in TestSystems.squireSystems
 
 
 if __name__ == '__main__':
-    testSystem = TestSystem(TestSystemNames.Squire1)
+    testSystem = TestSystem(TestSystems.Names.Squire1)
     testSystem.update_results()
 
     for result in testSystem.testResults:

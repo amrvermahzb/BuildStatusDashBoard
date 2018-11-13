@@ -1,6 +1,6 @@
 from squireMonitor import SquireMonitor
-from testSystemNames import TestSystemNames
-from testNames import TestNames
+from testSystems import TestSystems
+from tests import Tests
 import tkinter as tk
 from datetime import datetime
 
@@ -13,14 +13,14 @@ class SquireMonitorView(tk.Frame):
         questionimage = tk.PhotoImage(file="question_mark_70x70.png")
         redcrossimage = tk.PhotoImage(file="red_cross_70x70.png")
 
-        self.systemDisplayNames = {TestSystemNames.Squire1: "SQ1", TestSystemNames.Squire2: "SQ2",
-                                   TestSystemNames.Squire3: "SQ3", TestSystemNames.Squire4: "SQ4",
-                                   TestSystemNames.Squire5: "SQ5", TestSystemNames.Squire6: "SQ6",
-                                   TestSystemNames.Squire7: "SQ7", TestSystemNames.Squire8: "SQ8",
-                                   TestSystemNames.Squire9: "SQ9", TestSystemNames.BV2: "BV2", }
+        self.systemDisplayNames = {TestSystems.Names.Squire1: "SQ1", TestSystems.Names.Squire2: "SQ2",
+                                   TestSystems.Names.Squire3: "SQ3", TestSystems.Names.Squire4: "SQ4",
+                                   TestSystems.Names.Squire5: "SQ5", TestSystems.Names.Squire6: "SQ6",
+                                   TestSystems.Names.Squire7: "SQ7", TestSystems.Names.Squire8: "SQ8",
+                                   TestSystems.Names.Squire9: "SQ9", TestSystems.Names.BV2: "BV2", }
 
-        self.testDisplayNames = {TestNames.Drive: "DRIVE", TestNames.Loop: "LOOP", TestNames.IVVR: "IVVR",
-                                 TestNames.Install: "Install", TestNames.Regression: "Regression"}
+        self.testDisplayNames = {Tests.Names.Drive: "DRIVE", Tests.Names.Loop: "LOOP", Tests.Names.IVVR: "IVVR",
+                                 Tests.Names.Install: "Install", Tests.Names.Regression: "Regression"}
         self.labelColors = {"Failure": "red",
                             "Failed": "red",
                             "AbortedWithErrors": "red",
@@ -38,8 +38,8 @@ class SquireMonitorView(tk.Frame):
                             "Not found": questionimage}
 
         self.squireMonitor = SquireMonitor()
-        self.testSystemCount = len(TestSystemNames)
-        self.testCount = len(TestNames)
+        self.testSystemCount = len(TestSystems.Names)
+        self.testCount = len(Tests.Names)
 
         self.master.rowconfigure(0, weight=1)
         self.master.columnconfigure(0, weight=1)

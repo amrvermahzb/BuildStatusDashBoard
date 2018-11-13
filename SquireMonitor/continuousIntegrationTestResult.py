@@ -3,10 +3,10 @@ import os.path
 import xml.etree.ElementTree as ET
 
 
-class NonSquireTestResult(TestResult):
+class ContinuousIntegrationTestResult(TestResult):
     def __init__(self, testSystem, testName):
         super().__init__(testSystem, testName)
-        fileName = self.testDirectory.get_latest_test_result_filename(testName) + " - Test Results.xml"
+        fileName = self.testDirectory.get_latest_test_result_folder(testName) + " - Test Results.xml"
         self.resultFile = os.path.join(self.resultPath, fileName)
 
     def get_latest_result(self):
