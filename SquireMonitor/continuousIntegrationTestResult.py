@@ -1,3 +1,4 @@
+# Copyright (c) 2018 Koninklijke Philips N.V.
 from testResult import TestResult
 import os.path
 import xml.etree.ElementTree as ET

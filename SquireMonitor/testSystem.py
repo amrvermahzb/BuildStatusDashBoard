@@ -1,3 +1,4 @@
+# Copyright (c) 2018 Koninklijke Philips N.V.
 from squireTestResult import SquireTestResult
 from continuousIntegrationTestResult import ContinuousIntegrationTestResult
 from tests import Tests

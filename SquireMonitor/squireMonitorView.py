@@ -1,3 +1,4 @@
+# Copyright (c) 2018 Koninklijke Philips N.V.
 from squireMonitor import SquireMonitor
 from testSystems import TestSystems
 from tests import Tests
@@ -50,8 +51,9 @@ class SquireMonitorView(tk.Frame):
 
     def _update_label(self, r, c, testSystemName, result):
         label = self.buildLabels[r - 1][c - 1]
-        labelText = self.systemDisplayNames[testSystemName] + " " + self.testDisplayNames[
-            result.testName] + " " + result.get_latest_result_date()
+        labelText = self.systemDisplayNames[testSystemName] + " " + \
+                    self.testDisplayNames[result.testName] + " " + \
+                    result.get_latest_result_date()
 
         if result.is_overdue():
             labelText = labelText + " <<overdue>>"

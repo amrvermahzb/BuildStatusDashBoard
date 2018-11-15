@@ -1,3 +1,4 @@
+# Copyright (c) 2018 Koninklijke Philips N.V.
 from enum import Enum
 
 

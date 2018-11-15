@@ -1,3 +1,4 @@
+# Copyright (c) 2018 Koninklijke Philips N.V.
 from testDirectory import TestDirectory
 from datetime import datetime
 import os.path

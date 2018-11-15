@@ -1,14 +1,15 @@
+# Copyright (c) 2018 Koninklijke Philips N.V.
 import os.path
 from os import scandir
 from tests import Tests
 from testSystems import TestSystems
 
-BUILD_BASE_PATH = r'\\192.168.116.106\TestResults'
+TESTRESULTS_PATH = r'\\192.168.116.106\TestResults'
 RESULT_FOLDERS = {TestSystems.Names.Squire1: "\SQUIREIP-1\\", TestSystems.Names.Squire2: "\SQUIREIP-2\\",
                   TestSystems.Names.Squire3: "\SQUIREIP-3\\", TestSystems.Names.Squire4: "\SQUIREIP-4\\",
                   TestSystems.Names.Squire5: "\SQUIREIP-5\\", TestSystems.Names.Squire6: "\SQUIREIP-6\\",
-                  TestSystems.Names.Squire7: "\SQUIREIP-7\\", TestSystems.Names.Squire8: "\SQUIREIP-8H\\",
-                  TestSystems.Names.Squire9: "\SQUIREIP-9H\\",
+                  TestSystems.Names.Squire7: "\SQUIREIP-7\\", TestSystems.Names.Squire8: "\SQUIREIP-8\\",
+                  TestSystems.Names.Squire9: "\SQUIREIP-9\\",
                   TestSystems.Names.BV2: "\CI\\NLYBSTQVP4DT7K5\\",
                   }
 
@@ -18,7 +19,7 @@ TEST_APPENDIX = {Tests.Names.Drive: "_DRIVE", Tests.Names.Loop: "_LOOP", Tests.N
 
 class TestDirectory:
     def __init__(self, squireName):
-        self.squireFolder = BUILD_BASE_PATH + RESULT_FOLDERS[squireName]
+        self.squireFolder = TESTRESULTS_PATH + RESULT_FOLDERS[squireName]
 
     def get_test_paths(self, testName):
         testPaths = []

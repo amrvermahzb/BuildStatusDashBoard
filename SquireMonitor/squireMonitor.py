@@ -1,3 +1,4 @@
+# Copyright (c) 2018 Koninklijke Philips N.V.
 from testSystem import TestSystem
 from testSystems import TestSystems
 from tests import Tests
