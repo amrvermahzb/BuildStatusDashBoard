@@ -21,7 +21,8 @@ class SquireMonitorView(tk.Frame):
                                    TestSystems.Names.Squire9: "SQ9", TestSystems.Names.BV2: "BV2", }
 
         self.testDisplayNames = {Tests.Names.Drive: "DRIVE", Tests.Names.Loop: "LOOP", Tests.Names.IVVR: "IVVR",
-                                 Tests.Names.Install: "Install", Tests.Names.Regression: "Regression"}
+                                 Tests.Names.Install: "Install", Tests.Names.Nightbatch: "Nightbatch",
+                                 Tests.Names.Regressioncheck: "Regressioncheck"}
         self.labelColors = {"Failure": "red",
                             "Failed": "red",
                             "AbortedWithErrors": "red",

@@ -8,11 +8,13 @@ class Tests:
         Loop = 2
         IVVR = 3
         Install = 4
-        Regression = 5
+        Nightbatch = 5
+        Regressioncheck = 6
 
     squireTestSet = [Names.Drive,
                      Names.Loop,
                      Names.IVVR]
 
     continuousIntegrationTestSet = [Names.Install,
-                                    Names.Regression]
+                                    Names.Nightbatch,
+                                    Names.Regressioncheck]

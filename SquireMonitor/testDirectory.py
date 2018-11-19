@@ -14,7 +14,8 @@ RESULT_FOLDERS = {TestSystems.Names.Squire1: "\SQUIREIP-1\\", TestSystems.Names.
                   }
 
 TEST_APPENDIX = {Tests.Names.Drive: "_DRIVE", Tests.Names.Loop: "_LOOP", Tests.Names.IVVR: "_IVVR",
-                 Tests.Names.Install: "AlluraCIBatch", Tests.Names.Regression: "PBL8x Development Nightbatch"}
+                 Tests.Names.Install: "AlluraCIBatch", Tests.Names.Nightbatch: "PBL8x Development Nightbatch",
+                 Tests.Names.Regressioncheck: "precheck"}
 
 
 class TestDirectory:
@@ -31,11 +32,17 @@ class TestDirectory:
 
     def get_latest_test_result_path(self, testName):
         testPaths = self.get_test_paths(testName)
-        return os.path.join(self.squireFolder, testPaths[-1]) + "\\"
+        if testPaths:
+            return os.path.join(self.squireFolder, testPaths[-1]) + "\\"
+        else:
+            return "Not found"
 
     def get_latest_test_result_folder(self, testName):
         testPaths = self.get_test_paths(testName)
-        return testPaths[-1]
+        if testPaths:
+            return testPaths[-1]
+        else:
+            return "Not found"
 
 
 if __name__ == '__main__':

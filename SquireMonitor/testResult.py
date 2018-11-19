@@ -20,4 +20,7 @@ class TestResult:
 		return datetime.strptime(latestResultDate, self.dateTimeFormat) < datetime.strptime(now, self.dateTimeFormat)
 	
 	def get_latest_result_date(self):
-		return datetime.fromtimestamp(os.path.getctime(self.resultPath)).strftime(self.dateTimeFormat)
+		if self.resultPath != "Not found":
+			return datetime.fromtimestamp(os.path.getctime(self.resultPath)).strftime(self.dateTimeFormat)
+		else:
+			return datetime.now().strftime(self.dateTimeFormat)
