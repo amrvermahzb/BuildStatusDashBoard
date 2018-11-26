@@ -27,6 +27,7 @@ class SquireMonitorView(tk.Frame):
                             "Failed": "red",
                             "AbortedWithErrors": "red",
                             "AbortedNoErrors": "red",
+                            "Unknown": "red",
                             "Success": "green",
                             "Passed": "green",
                             "Not found": "grey"}
@@ -35,6 +36,7 @@ class SquireMonitorView(tk.Frame):
                             "Failed": redcrossimage,
                             "AbortedWithErrors": redcrossimage,
                             "AbortedNoErrors": redcrossimage,
+                            "Unknown": redcrossimage,
                             "Success": checkimage,
                             "Passed": checkimage,
                             "Not found": questionimage}
@@ -60,6 +62,9 @@ class SquireMonitorView(tk.Frame):
             labelText = labelText + " <<overdue>>"
 
         latestResult = result.get_latest_result()
+        if not latestResult in self.labelColors or not latestResult in self.resultImage:
+            latestResult = "Not found"
+
         content = tk.StringVar()
         content.set(labelText)
         if label == 0:
