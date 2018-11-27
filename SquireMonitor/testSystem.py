@@ -1,6 +1,8 @@
 # Copyright (c) 2018 Koninklijke Philips N.V.
 from squireTestResult import SquireTestResult
 from continuousIntegrationTestResult import ContinuousIntegrationTestResult
+from reviewingTestResult import ReviewingTestResult
+from ipislibTestResult import IpislibTestResult
 from tests import Tests
 from testSystems import TestSystems
 
@@ -15,7 +17,12 @@ class TestSystem:
         self.testResults.clear()
         for testName in self.testSet:
             if self.is_squire_system(self.name):
-                self.testResults.append(SquireTestResult(self.name, testName))
+                if testName == Tests.Names.Reviewing:
+                    self.testResults.append(ReviewingTestResult(self.name, testName))
+                elif testName == Tests.Names.IPISLIB:
+                    self.testResults.append(IpislibTestResult(self.name, testName))
+                else:
+                    self.testResults.append(SquireTestResult(self.name, testName))
             else:
                 self.testResults.append(ContinuousIntegrationTestResult(self.name, testName))
 

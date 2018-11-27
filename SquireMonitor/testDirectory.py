@@ -14,6 +14,7 @@ RESULT_FOLDERS = {TestSystems.Names.Squire1: "\SQUIREIP-1\\", TestSystems.Names.
                   }
 
 TEST_APPENDIX = {Tests.Names.Drive: "_DRIVE", Tests.Names.Loop: "_LOOP", Tests.Names.IVVR: "_IVVR",
+                 Tests.Names.IPISLIB: "_IPISLIB", Tests.Names.Reviewing: "_Reviewing",
                  Tests.Names.Install: "AlluraCIBatch", Tests.Names.Nightbatch: "PBL8x Development Nightbatch",
                  Tests.Names.Regressioncheck: "precheck"}
 

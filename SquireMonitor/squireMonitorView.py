@@ -21,24 +21,29 @@ class SquireMonitorView(tk.Frame):
                                    TestSystems.Names.Squire9: "SQ9", TestSystems.Names.BV2: "BV2", }
 
         self.testDisplayNames = {Tests.Names.Drive: "DRIVE", Tests.Names.Loop: "LOOP", Tests.Names.IVVR: "IVVR",
+                                 Tests.Names.IPISLIB: "IPISLIB", Tests.Names.Reviewing: "Reviewing",
                                  Tests.Names.Install: "Install", Tests.Names.Nightbatch: "Nightbatch",
                                  Tests.Names.Regressioncheck: "Regressioncheck"}
         self.labelColors = {"Failure": "red",
                             "Failed": "red",
+                            "FAILED": "red",
                             "AbortedWithErrors": "red",
                             "AbortedNoErrors": "red",
                             "Unknown": "red",
                             "Success": "green",
                             "Passed": "green",
+                            "PASSED": "green",
                             "Not found": "grey"}
 
         self.resultImage = {"Failure": redcrossimage,
                             "Failed": redcrossimage,
+                            "FAILED": redcrossimage,
                             "AbortedWithErrors": redcrossimage,
                             "AbortedNoErrors": redcrossimage,
                             "Unknown": redcrossimage,
                             "Success": checkimage,
                             "Passed": checkimage,
+                            "PASSED": checkimage,
                             "Not found": questionimage}
 
         self.squireMonitor = SquireMonitor()
@@ -55,14 +60,14 @@ class SquireMonitorView(tk.Frame):
     def _update_label(self, r, c, testSystemName, result):
         label = self.buildLabels[r - 1][c - 1]
         labelText = self.systemDisplayNames[testSystemName] + " " + \
-                    self.testDisplayNames[result.testName] + " " + \
+                    self.testDisplayNames[result.testName] + "\n" + \
                     result.get_latest_result_date()
 
         if result.is_overdue():
-            labelText = labelText + " <<overdue>>"
+            labelText = labelText + "\n<<overdue>>"
 
         latestResult = result.get_latest_result()
-        if not latestResult in self.labelColors or not latestResult in self.resultImage:
+        if latestResult not in self.labelColors or latestResult not in self.resultImage:
             latestResult = "Not found"
 
         content = tk.StringVar()
@@ -71,7 +76,7 @@ class SquireMonitorView(tk.Frame):
             # create label only at first time
             label = tk.Label(self, textvariable=content, anchor=tk.W, padx=20, compound=tk.LEFT, relief=tk.RAISED,
                              bg=self.labelColors[latestResult], image=self.resultImage[latestResult],
-                             font=('Helvetica', 17, 'bold'))
+                             font=('Helvetica', 15, 'bold'))
             self.buildLabels[r - 1][c - 1] = label
         else:
             # else update label text and color
