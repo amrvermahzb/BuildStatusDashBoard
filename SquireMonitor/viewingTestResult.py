@@ -10,17 +10,17 @@ class ViewingTestResult(TestResult):
         self.resultFile = os.path.join(self.resultPath, 'test_summary.txt')
 
     def get_config(self):
-        return self.get_summary_element("CONFIG")
+        return self._get_summary_element("CONFIG")
 
     def get_result(self, systemMode):
-        summaryElement = self.get_summary_element(systemMode)
+        summaryElement = self._get_summary_element(systemMode)
         if summaryElement != "Not found":
             testResultStr = "Overal TestResult ===>"
             subStringContainingResult = summaryElement[testResultStr.__len__():]
-            return self.get_alpha_numeric_characters(subStringContainingResult)
+            return self._get_alpha_numeric_characters(subStringContainingResult)
         return "Not found"
 
-    def get_summary_element(self, summaryElement):
+    def _get_summary_element(self, summaryElement):
         returnValue = "Not found"
         summaryElementStr = summaryElement + ":"
         resultFile = open(self.resultFile, 'r')
@@ -30,6 +30,6 @@ class ViewingTestResult(TestResult):
         resultFile.close()
         return returnValue
 
-    def get_alpha_numeric_characters(self, line):
+    def _get_alpha_numeric_characters(self, line):
         pattern = re.compile('\W')
         return re.sub(pattern, '', line)

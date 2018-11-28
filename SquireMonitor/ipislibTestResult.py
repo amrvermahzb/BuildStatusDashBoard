@@ -1,7 +1,6 @@
 # Copyright (c) 2018 Koninklijke Philips N.V.
 from viewingTestResult import ViewingTestResult
 import os.path
-import re
 
 
 class IpislibTestResult(ViewingTestResult):
