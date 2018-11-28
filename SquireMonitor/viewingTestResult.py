@@ -15,9 +15,10 @@ class ViewingTestResult(TestResult):
     def get_result(self, systemMode):
         summaryElement = self._get_summary_element(systemMode)
         if summaryElement != "Not found":
-            testResultStr = "Overal TestResult ===>"
-            subStringContainingResult = summaryElement[testResultStr.__len__():]
-            return self._get_alpha_numeric_characters(subStringContainingResult)
+            if "Overal TestResult" in summaryElement and "PASSED" in summaryElement:
+                return "PASSED"
+            else:
+                return "FAILED"
         return "Not found"
 
     def _get_summary_element(self, summaryElement):
