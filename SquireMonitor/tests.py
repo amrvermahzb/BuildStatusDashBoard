@@ -9,15 +9,17 @@ class Tests:
         IVVR = 3
         IPISLIB = 4
         Reviewing = 5
-        Install = 6
-        Nightbatch = 7
-        Regressioncheck = 8
+        Tsm = 6
+        Install = 7
+        Nightbatch = 8
+        Regressioncheck = 9
 
     squireTestSet = [Names.Drive,
                      Names.Loop,
                      Names.IVVR,
                      Names.IPISLIB,
-                     Names.Reviewing]
+                     Names.Reviewing,
+                     Names.Tsm]
 
     continuousIntegrationTestSet = [Names.Install,
                                     Names.Nightbatch,

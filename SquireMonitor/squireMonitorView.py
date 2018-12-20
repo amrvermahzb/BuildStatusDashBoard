@@ -22,6 +22,7 @@ class SquireMonitorView(tk.Frame):
 
         self.testDisplayNames = {Tests.Names.Drive: "DRIVE", Tests.Names.Loop: "LOOP", Tests.Names.IVVR: "IVVR",
                                  Tests.Names.IPISLIB: "IPISLIB", Tests.Names.Reviewing: "Reviewing",
+                                 Tests.Names.Tsm: "TSM",
                                  Tests.Names.Install: "Install", Tests.Names.Nightbatch: "Nightbatch",
                                  Tests.Names.Regressioncheck: "Regressioncheck"}
         self.labelColors = {"Failure": "red",

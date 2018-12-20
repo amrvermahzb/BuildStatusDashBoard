@@ -3,6 +3,7 @@ from squireTestResult import SquireTestResult
 from continuousIntegrationTestResult import ContinuousIntegrationTestResult
 from reviewingTestResult import ReviewingTestResult
 from ipislibTestResult import IpislibTestResult
+from tsmTestResult import TsmTestResult
 from tests import Tests
 from testSystems import TestSystems
 
@@ -21,6 +22,8 @@ class TestSystem:
                     self.testResults.append(ReviewingTestResult(self.name, testName))
                 elif testName == Tests.Names.IPISLIB:
                     self.testResults.append(IpislibTestResult(self.name, testName))
+                elif testName == Tests.Names.Tsm:
+                    self.testResults.append(TsmTestResult(self.name, testName))
                 else:
                     self.testResults.append(SquireTestResult(self.name, testName))
             else:
