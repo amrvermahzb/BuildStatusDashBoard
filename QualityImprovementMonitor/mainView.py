@@ -97,9 +97,9 @@ class MainView:
         label_table = Label(label_content, style="Background.TLabel")
         label_table.grid(row=4, column=1, columnspan=3)
 
-        label_table_row_header_1 = Label(label_table, text="Wrong warning level", style="TableRowHeader.TLabel")
-        label_table_row_header_1.grid(row=2, column=1)
         label_table_row_header_1 = Label(label_table, text="Treat warnings not as errors", style="TableRowHeader.TLabel")
+        label_table_row_header_1.grid(row=2, column=1)
+        label_table_row_header_1 = Label(label_table, text="Wrong warning level", style="TableRowHeader.TLabel")
         label_table_row_header_1.grid(row=3, column=1)
         label_table_row_header_2 = Label(label_table, text="Suppressed warnings", style="TableRowHeader.TLabel")
         label_table_row_header_2.grid(row=4, column=1)
@@ -134,15 +134,15 @@ class MainView:
             else:
                 label_table_column_header.configure(text="Total")
 
-            # wrong warning level
-            label_wrong_warning_level_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
-            label_wrong_warning_level_data.grid(row=2, column=current_column)
-            self.labels_wrong_warning_level_data.append(label_wrong_warning_level_data)
-
             # treat warnings not as errors
             label_treat_warnings_not_as_errors_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
-            label_treat_warnings_not_as_errors_data.grid(row=3, column=current_column)
+            label_treat_warnings_not_as_errors_data.grid(row=2, column=current_column)
             self.labels_treat_warnings_not_as_errors_data.append(label_treat_warnings_not_as_errors_data)
+
+            # wrong warning level
+            label_wrong_warning_level_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
+            label_wrong_warning_level_data.grid(row=3, column=current_column)
+            self.labels_wrong_warning_level_data.append(label_wrong_warning_level_data)
 
             # suppressed warnings
             label_suppressed_warnings_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
@@ -264,7 +264,7 @@ class MainView:
         # plot labels
         plt.xlabel('Date')
         plt.ylabel(worksheet_name)
-        plt.title(worksheet_name + ' burndown')
+        plt.title(worksheet_name)
 
         # plot ticks
         years = mdates.YearLocator()  # every year
