@@ -94,6 +94,10 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[3])
 
+    def get_history_total_warnings(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[4])
+
     def get_values_coverity_level_1(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[5])
@@ -101,6 +105,10 @@ class QualityMetricsHistory:
     def get_deltas_coverity_level_1(self):
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[5])
+
+    def get_history_coverity_level_1(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[5])
 
     def get_values_coverity_level_2(self):
         wb = load_workbook(self.filename)
@@ -117,6 +125,10 @@ class QualityMetricsHistory:
     def get_deltas_security_level_1(self):
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[7])
+
+    def get_history_security_level_1(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[7])
 
     def get_values_security_level_2(self):
         wb = load_workbook(self.filename)
@@ -242,3 +254,14 @@ class QualityMetricsHistory:
             else:
                 deltas.append(0)
         return deltas
+
+    def _get_history(self, worksheet):
+        totals = {}
+        date_column = 1
+        totals_column = len(self.unit_collection.units) + 2
+
+        for current_row in range(2, worksheet.max_row):
+            date = worksheet.cell(current_row, date_column).value
+            total = worksheet.cell(current_row, totals_column).value
+            totals[date] = total
+        return totals

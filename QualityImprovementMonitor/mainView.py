@@ -206,9 +206,10 @@ class MainView:
         burn_down_begin_value = 6600
         burn_down_end_date = '31-Dec-2019'
         burn_down_end_value = 0
+        data = self.qualityMetricsHistory.get_history_total_warnings()
 
         worksheet_name = self.qualityMetricsHistory.worksheet_names[4]
-        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, self.filename_warning_burndown_graph)
+        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_warning_burndown_graph)
         self.image_warning_burndown_graph.configure(file=self.filename_warning_burndown_graph)
 
     def _update_coverity_burn_down_chart(self):
@@ -220,9 +221,10 @@ class MainView:
         burn_down_begin_value = 546
         burn_down_end_date = '02-Jul-2019'
         burn_down_end_value = 0
+        data = self.qualityMetricsHistory.get_history_coverity_level_1()
 
         worksheet_name = self.qualityMetricsHistory.worksheet_names[5]
-        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, self.filename_coverity_burndown_graph)
+        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_coverity_burndown_graph)
         self.image_coverity_burndown_graph.configure(file=self.filename_coverity_burndown_graph)
 
     def _update_security_burn_down_chart(self):
@@ -234,12 +236,13 @@ class MainView:
         burn_down_begin_value = 1100
         burn_down_end_date = '31-Dec-2019'
         burn_down_end_value = 0
+        data = self.qualityMetricsHistory.get_history_security_level_1()
 
         worksheet_name = self.qualityMetricsHistory.worksheet_names[7]
-        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, self.filename_security_burndown_graph)
+        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_security_burndown_graph)
         self.image_security_burndown_graph.configure(file=self.filename_security_burndown_graph)
 
-    def _generate_burn_down_chart(self, worksheet_name, min_y, max_y, step_y, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, graph_filename):
+    def _generate_burn_down_chart(self, worksheet_name, min_y, max_y, step_y, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, graph_filename):
         date_format = "%d-%b-%Y"
 
         plt.clf()
@@ -248,6 +251,8 @@ class MainView:
         min_x = datetime.strptime(self.chart_begin_date, date_format)
         max_x = datetime.strptime(self.chart_end_date, date_format)
         plt.xlim(min_x, max_x)
+
+        plt.plot_date(data.keys(), data.values())
 
         # read excel and plot data
         data_frame = panda.ExcelFile(self.qualityMetricsHistory.filename).parse(worksheet_name)
