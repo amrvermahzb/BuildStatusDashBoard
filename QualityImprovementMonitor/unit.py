@@ -6,7 +6,7 @@ import time
 import datetime
 from time import strftime
 from warningSettingsReport import *
-from buildWarningsReport import *
+from buildWarningMetricsReport import *
 from ticsMetricsReport import *
 
 BUILD_BASE_PATH = r'\\code1.emi.philips.com\storage\IGTS_WIP_Storage\CIBuilds'
@@ -51,7 +51,7 @@ class Unit:
 
     def _get_latest_build_actual_warnings_report(self):
         filename = self.last_successful_build_path + r'\Logging\GENERATE\Reports\VisualStudioBuildTotals.xml'
-        return BuildWarningsReport(filename)
+        return BuildWarningMetricsReport(filename)
 
     def update_path_last_successful_build(self):
         build_directory_root = self._get_build_directory_root()

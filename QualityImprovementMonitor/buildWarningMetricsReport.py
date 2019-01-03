@@ -4,7 +4,7 @@ import os
 import xml.etree.ElementTree as ET
 
 
-class BuildWarningsReport:
+class BuildWarningMetricsReport:
 
     def __init__(self, filename):
         self.warning_count = 0

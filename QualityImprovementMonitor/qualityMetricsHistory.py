@@ -6,12 +6,11 @@ from openpyxl import *
 from datetime import *
 
 
-class WarningSettingsHistory:
+class QualityMetricsHistory:
 
     def __init__(self, unit_collection):
         self.unit_collection = unit_collection
-        self.filename = r'd:/compiler_warning_settings_analyzer_history.xlsx'
-
+        self.filename = r'QualityMetricsHistory.xlsx'
         self.worksheet_names = ["Wrong warning level", "Treat warning not as error", "Suppressed warnings", "Actual warnings", "Total warnings", "Coverity level 1", "Coverity level 2", "Security level 1", "Security level 2"]
 
         if not os.path.isfile(self.filename):

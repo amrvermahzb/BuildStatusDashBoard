@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
-from warningSettingsHistory import *
+from qualityMetricsHistory import *
 from unitCollection import *
 from unit import *
 from datetime import datetime
@@ -19,7 +19,11 @@ class MainView:
 
         # data
         self.unit_collection = UnitCollection()
-        self.warning_settings_history = WarningSettingsHistory(self.unit_collection)
+        self.qualityMetricsHistory = QualityMetricsHistory(self.unit_collection)
+
+        # define begin date range
+        self.chart_begin_date = '12-Sep-2017'
+        self.chart_end_date = '31-Dec-2019'
 
         # define fonts
         self.large_font_bold = "Verdana 30 bold"
@@ -39,7 +43,7 @@ class MainView:
         self.title_style.configure("Title.TLabel", foreground="black", background="white", font=self.large_font_bold)
 
         self.image_style = Style()
-        self.image_style.configure("Image.TLabel", borderwidth=0, highlightthickness=0)
+        self.image_style.configure("Image.TLabel", background="white")
 
         self.table_row_header_style = Style()
         self.table_row_header_style.configure("TableRowHeader.TLabel", foreground="black", background="white", font=self.small_font, width=25, anchor=W, border=1)
@@ -178,91 +182,84 @@ class MainView:
         self.root.mainloop()
 
     def _update_history_file(self):
-        self.warning_settings_history.update()
+        self.qualityMetricsHistory.update()
         return
 
     def _update_user_interface(self):
         print("begin update ui")
-        date_format = "%d-%b-%Y"
-        day1 = datetime.strptime('12-Sep-2017', date_format)
-        day2 = datetime.strptime('02-Jul-2019', date_format)
 
-        worksheet_name = self.warning_settings_history.worksheet_names[4]
-        self._generate_burn_down_chart(worksheet_name, day1, day2, 6600, 0, 0, 8000, 500, self.filename_warning_burndown_graph)
-        self.image_warning_burndown_graph.configure(file=self.filename_warning_burndown_graph)
-
-        worksheet_name = self.warning_settings_history.worksheet_names[5]
-        self._generate_burn_down_chart(worksheet_name, day1, day2, 546, 0, 0, 600, 100, self.filename_coverity_burndown_graph)
-        self.image_coverity_burndown_graph.configure(file=self.filename_coverity_burndown_graph)
-
-        worksheet_name = self.warning_settings_history.worksheet_names[7]
-        self._generate_burn_down_chart(worksheet_name, day1, day2, 2260, 0, 0, 2500, 500, self.filename_security_burndown_graph)
-        self.image_security_burndown_graph.configure(file=self.filename_security_burndown_graph)
-
-        for index in range(len(self.unit_collection.units) + 1):
-            value = self.warning_settings_history.get_values_wrong_warning_level()[index]
-            delta = self.warning_settings_history.get_deltas_wrong_warning_level()[index]
-            self._update_table_label(self.labels_wrong_warning_level_data[index], value, delta)
-
-            value = self.warning_settings_history.get_values_treat_warnings_not_as_errors()[index]
-            delta = self.warning_settings_history.get_deltas_treat_warnings_not_as_errors()[index]
-            self._update_table_label(self.labels_treat_warnings_not_as_errors_data[index], value, delta)
-
-            value = self.warning_settings_history.get_values_suppressed_warnings()[index]
-            delta = self.warning_settings_history.get_deltas_suppressed_warnings()[index]
-            self._update_table_label(self.labels_suppressed_warnings_data[index], value, delta)
-
-            value = self.warning_settings_history.get_values_actual_warnings()[index]
-            delta = self.warning_settings_history.get_deltas_actual_warnings()[index]
-            self._update_table_label(self.labels_actual_warnings_data[index], value, delta)
-
-            value = self.warning_settings_history.get_values_coverity_level_1()[index]
-            delta = self.warning_settings_history.get_deltas_coverity_level_1()[index]
-            self._update_table_label(self.labels_coverity_level_1_data[index], value, delta)
-
-            value = self.warning_settings_history.get_values_coverity_level_2()[index]
-            delta = self.warning_settings_history.get_deltas_coverity_level_2()[index]
-            self._update_table_label(self.labels_coverity_level_2_data[index], value, delta)
-
-            value = self.warning_settings_history.get_values_security_level_1()[index]
-            delta = self.warning_settings_history.get_deltas_security_level_1()[index]
-            self._update_table_label(self.labels_security_level_1_data[index], value, delta)
-
-            value = self.warning_settings_history.get_values_security_level_2()[index]
-            delta = self.warning_settings_history.get_deltas_security_level_2()[index]
-            self._update_table_label(self.labels_security_level_2_data[index], value, delta)
+        self._update_warnings_burn_down_chart()
+        self._update_coverity_burn_down_chart()
+        self._update_security_burn_down_chart()
+        self._update_table_values()
 
         print("end update ui")
 
         return
 
-    def _update_table_label(self, label, value, delta):
-        style = "TableCellValueUnchanged.TLabel"
-        if delta < 0:
-            style = "TableCellValueDown.TLabel"
-        if delta > 0:
-            style = "TableCellValueUp.TLabel"
-        label.configure(style=style)
-        label.configure(text=str(value))
-        if delta != 0:
-            label.configure(text=str(delta))
+    def _update_warnings_burn_down_chart(self):
+        min_value = 0
+        max_value = 8000
+        step = 500
+        burn_down_show = False
+        burn_down_begin_date = '1-Jan-2019'
+        burn_down_begin_value = 6600
+        burn_down_end_date = '31-Dec-2019'
+        burn_down_end_value = 0
 
-    def _generate_burn_down_chart(self, worksheet_name, begin_date, end_date, burn_down_begin_y, burn_down_end_y, min_y, max_y, step_y, graph_filename):
+        worksheet_name = self.qualityMetricsHistory.worksheet_names[4]
+        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, self.filename_warning_burndown_graph)
+        self.image_warning_burndown_graph.configure(file=self.filename_warning_burndown_graph)
+
+    def _update_coverity_burn_down_chart(self):
+        min_value = 0
+        max_value = 600
+        step = 100
+        burn_down_show = True
+        burn_down_begin_date = '12-Sep-2017'
+        burn_down_begin_value = 546
+        burn_down_end_date = '02-Jul-2019'
+        burn_down_end_value = 0
+
+        worksheet_name = self.qualityMetricsHistory.worksheet_names[5]
+        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, self.filename_coverity_burndown_graph)
+        self.image_coverity_burndown_graph.configure(file=self.filename_coverity_burndown_graph)
+
+    def _update_security_burn_down_chart(self):
+        min_value = 0
+        max_value = 1500
+        step = 500
+        burn_down_show = False
+        burn_down_begin_date = '1-Jan-2019'
+        burn_down_begin_value = 1100
+        burn_down_end_date = '31-Dec-2019'
+        burn_down_end_value = 0
+
+        worksheet_name = self.qualityMetricsHistory.worksheet_names[7]
+        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, self.filename_security_burndown_graph)
+        self.image_security_burndown_graph.configure(file=self.filename_security_burndown_graph)
+
+    def _generate_burn_down_chart(self, worksheet_name, min_y, max_y, step_y, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, graph_filename):
+        date_format = "%d-%b-%Y"
+
         plt.clf()
 
-        # set date range
-        plt.xlim(begin_date, end_date)
+        # set range
+        min_x = datetime.strptime(self.chart_begin_date, date_format)
+        max_x = datetime.strptime(self.chart_end_date, date_format)
+        plt.xlim(min_x, max_x)
 
         # read excel and plot data
-        data_frame = panda.ExcelFile(self.warning_settings_history.filename).parse(worksheet_name)
-        df = panda.DataFrame(
-            {'x': data_frame['Date'],
-             'Total': data_frame['Total']})
+        data_frame = panda.ExcelFile(self.qualityMetricsHistory.filename).parse(worksheet_name)
+        df = panda.DataFrame({'x': data_frame['Date'], 'Total': data_frame['Total']})
         for column in df.drop('x', axis=1):
             plt.plot(df['x'], df[column], label=column)
 
-        # plot burndown
-        plt.plot([begin_date, end_date], [burn_down_begin_y, burn_down_end_y], '--r', label="Burndown")
+        # plot burn down
+        if burn_down_show:
+            burn_down_begin_x = datetime.strptime(burn_down_begin_date, date_format)
+            burn_down_end_x = datetime.strptime(burn_down_end_date, date_format)
+            plt.plot([burn_down_begin_x, burn_down_end_x], [burn_down_begin_value, burn_down_end_value], '--r', label="Burndown")
 
         # plot labels
         plt.xlabel('Date')
@@ -278,17 +275,53 @@ class MainView:
         plt.gca().xaxis.set_minor_locator(months)
         plt.yticks(np.arange(min_y, max_y, step=step_y))
 
-        # plot legend
-        #plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=None)
-
-        # plot grid
-        # plt.grid(True)
-        # plt.grid(linewidth='0.5', color='black')
-        # plt.tight_layout()
-
         # save image
         plt.savefig(graph_filename, bbox_inches='tight', dpi=100)
 
+    def _update_table_values(self):
+        for index in range(len(self.unit_collection.units) + 1):
+            value = self.qualityMetricsHistory.get_values_wrong_warning_level()[index]
+            delta = self.qualityMetricsHistory.get_deltas_wrong_warning_level()[index]
+            self._update_table_label(self.labels_wrong_warning_level_data[index], value, delta)
+
+            value = self.qualityMetricsHistory.get_values_treat_warnings_not_as_errors()[index]
+            delta = self.qualityMetricsHistory.get_deltas_treat_warnings_not_as_errors()[index]
+            self._update_table_label(self.labels_treat_warnings_not_as_errors_data[index], value, delta)
+
+            value = self.qualityMetricsHistory.get_values_suppressed_warnings()[index]
+            delta = self.qualityMetricsHistory.get_deltas_suppressed_warnings()[index]
+            self._update_table_label(self.labels_suppressed_warnings_data[index], value, delta)
+
+            value = self.qualityMetricsHistory.get_values_actual_warnings()[index]
+            delta = self.qualityMetricsHistory.get_deltas_actual_warnings()[index]
+            self._update_table_label(self.labels_actual_warnings_data[index], value, delta)
+
+            value = self.qualityMetricsHistory.get_values_coverity_level_1()[index]
+            delta = self.qualityMetricsHistory.get_deltas_coverity_level_1()[index]
+            self._update_table_label(self.labels_coverity_level_1_data[index], value, delta)
+
+            value = self.qualityMetricsHistory.get_values_coverity_level_2()[index]
+            delta = self.qualityMetricsHistory.get_deltas_coverity_level_2()[index]
+            self._update_table_label(self.labels_coverity_level_2_data[index], value, delta)
+
+            value = self.qualityMetricsHistory.get_values_security_level_1()[index]
+            delta = self.qualityMetricsHistory.get_deltas_security_level_1()[index]
+            self._update_table_label(self.labels_security_level_1_data[index], value, delta)
+
+            value = self.qualityMetricsHistory.get_values_security_level_2()[index]
+            delta = self.qualityMetricsHistory.get_deltas_security_level_2()[index]
+            self._update_table_label(self.labels_security_level_2_data[index], value, delta)
+
+    def _update_table_label(self, label, value, delta):
+        style = "TableCellValueUnchanged.TLabel"
+        if delta < 0:
+            style = "TableCellValueDown.TLabel"
+        if delta > 0:
+            style = "TableCellValueUp.TLabel"
+        label.configure(style=style)
+        label.configure(text=str(value))
+        if delta != 0:
+            label.configure(text=str(delta) + "(" + str(value) + ")")
 
     def _update(self):
         now = time.strftime("(snapshot %A %B %d %H:%M:%S)")
