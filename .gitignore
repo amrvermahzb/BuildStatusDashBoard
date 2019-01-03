@@ -99,3 +99,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+QualityImprovementMonitor/.mypy_cache/
+QualityImprovementMonitor/.idea
