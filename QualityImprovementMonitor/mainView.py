@@ -4,7 +4,6 @@ from qualityMetricsHistory import *
 from unitCollection import *
 from unit import *
 from datetime import datetime
-import pandas as panda
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
@@ -199,14 +198,14 @@ class MainView:
 
     def _update_warnings_burn_down_chart(self):
         min_value = 0
-        max_value = 8000
-        step = 500
+        max_value = 9000
+        step = 1000
         burn_down_show = False
         burn_down_begin_date = '1-Jan-2019'
         burn_down_begin_value = 6600
         burn_down_end_date = '31-Dec-2019'
         burn_down_end_value = 0
-        data = self.qualityMetricsHistory.get_history_total_warnings()
+        data = self.qualityMetricsHistory.get_history_warning_suppression_indicator()
 
         worksheet_name = self.qualityMetricsHistory.worksheet_names[4]
         self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_warning_burndown_graph)
@@ -229,7 +228,7 @@ class MainView:
 
     def _update_security_burn_down_chart(self):
         min_value = 0
-        max_value = 1500
+        max_value = 2000
         step = 500
         burn_down_show = False
         burn_down_begin_date = '1-Jan-2019'
@@ -252,13 +251,7 @@ class MainView:
         max_x = datetime.strptime(self.chart_end_date, date_format)
         plt.xlim(min_x, max_x)
 
-        plt.plot_date(data.keys(), data.values())
-
-        # read excel and plot data
-        data_frame = panda.ExcelFile(self.qualityMetricsHistory.filename).parse(worksheet_name)
-        df = panda.DataFrame({'x': data_frame['Date'], 'Total': data_frame['Total']})
-        for column in df.drop('x', axis=1):
-            plt.plot(df['x'], df[column], label=column)
+        plt.plot_date(data.keys(), data.values(), "-")
 
         # plot burn down
         if burn_down_show:

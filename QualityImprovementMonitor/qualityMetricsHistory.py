@@ -11,7 +11,7 @@ class QualityMetricsHistory:
     def __init__(self, unit_collection):
         self.unit_collection = unit_collection
         self.filename = r'QualityMetricsHistory.xlsx'
-        self.worksheet_names = ["Wrong warning level", "Treat warning not as error", "Suppressed warnings", "Actual warnings", "Total warnings", "Coverity level 1", "Coverity level 2", "Security level 1", "Security level 2"]
+        self.worksheet_names = ["Wrong warning level", "Treat warning not as error", "Suppressed warnings", "Actual warnings", "Coverity level 1", "Coverity level 2", "Security level 1", "Security level 2"]
 
         if not os.path.isfile(self.filename):
             self._create_workbook()
@@ -31,36 +31,14 @@ class QualityMetricsHistory:
         self._fill_worksheet_treat_warnings_not_as_errors(wb.worksheets[1], time_stamp)
         self._fill_worksheet_suppressed_warnings(wb.worksheets[2], time_stamp)
         self._fill_worksheet_actual_warnings(wb.worksheets[3], time_stamp)
-        self._fill_worksheet_total_warnings(wb.worksheets[4], time_stamp)
-        self._fill_worksheet_coverity_warnings(wb.worksheets[5], time_stamp, 1)
-        self._fill_worksheet_coverity_warnings(wb.worksheets[6], time_stamp, 2)
-        self._fill_worksheet_security_warnings(wb.worksheets[7], time_stamp, 1)
-        self._fill_worksheet_security_warnings(wb.worksheets[8], time_stamp, 2)
+        self._fill_worksheet_coverity_warnings(wb.worksheets[4], time_stamp, 1)
+        self._fill_worksheet_coverity_warnings(wb.worksheets[5], time_stamp, 2)
+        self._fill_worksheet_security_warnings(wb.worksheets[6], time_stamp, 1)
+        self._fill_worksheet_security_warnings(wb.worksheets[7], time_stamp, 2)
 
         wb.save(self.filename)
 
         print("end update history")
-
-    def get_current_suppressed_warning_count(self):
-        suppressed_warnings_for_all_units = 0
-
-        for unit in self.unit_collection.units:
-            suppressed_warnings_for_all_units += unit.get_latest_build_suppressed_warning_count()
-        return suppressed_warnings_for_all_units
-
-    def get_current_actual_warnings_count(self):
-        actual_warnings_for_all_units = 0
-
-        for unit in self.unit_collection.units:
-            actual_warnings_for_all_units += unit.get_latest_build_actual_warning_count()
-        return actual_warnings_for_all_units
-
-    def get_current_total_warnings_count(self):
-        total_warnings_for_all_units = 0
-
-        for unit in self.unit_collection.units:
-            total_warnings_for_all_units += unit.get_latest_build_total_warning_count()
-        return total_warnings_for_all_units
 
     def get_values_wrong_warning_level(self):
         wb = load_workbook(self.filename)
@@ -70,6 +48,10 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[0])
 
+    def get_history_wrong_warning_level(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[0])
+
     def get_values_treat_warnings_not_as_errors(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[1])
@@ -77,6 +59,10 @@ class QualityMetricsHistory:
     def get_deltas_treat_warnings_not_as_errors(self):
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[1])
+
+    def get_history_treat_warnings_not_as_errors(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[1])
 
     def get_values_suppressed_warnings(self):
         wb = load_workbook(self.filename)
@@ -86,6 +72,10 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[2])
 
+    def get_history_suppressed_warnings(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[2])
+
     def get_values_actual_warnings(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[3])
@@ -94,54 +84,81 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[3])
 
-    def get_history_total_warnings(self):
+    def get_history_actual_warnings(self):
         wb = load_workbook(self.filename)
-        return self._get_history(wb.worksheets[4])
+        return self._get_history(wb.worksheets[3])
+
+    def get_history_warning_suppression_indicator(self):
+        totals = {}
+
+        history_wrong_warning_level = self.get_history_wrong_warning_level()
+        history_treat_warnings_not_as_errors = self.get_history_treat_warnings_not_as_errors()
+        history_suppressed_warnings = self.get_history_suppressed_warnings()
+        history_actual_warnings = self.get_history_actual_warnings()
+
+        weight_treat_warnings_not_as_errors = 0
+        weight_wrong_warning_levels = 0
+        weight_suppressed_warnings = 1
+        weight_actual_warnings = 1
+
+        for key, value in history_wrong_warning_level.items():
+            total = (history_treat_warnings_not_as_errors[key] * weight_treat_warnings_not_as_errors) + \
+                    (history_wrong_warning_level[key]) * weight_wrong_warning_levels +\
+                    (history_suppressed_warnings[key] * weight_suppressed_warnings) + \
+                    (history_actual_warnings[key] * weight_actual_warnings)
+
+            totals[key] = total
+
+        return totals
 
     def get_values_coverity_level_1(self):
         wb = load_workbook(self.filename)
-        return self._get_values(wb.worksheets[5])
+        return self._get_values(wb.worksheets[4])
 
     def get_deltas_coverity_level_1(self):
         wb = load_workbook(self.filename)
-        return self._get_deltas(wb.worksheets[5])
+        return self._get_deltas(wb.worksheets[4])
 
     def get_history_coverity_level_1(self):
         wb = load_workbook(self.filename)
-        return self._get_history(wb.worksheets[5])
+        return self._get_history(wb.worksheets[4])
 
     def get_values_coverity_level_2(self):
         wb = load_workbook(self.filename)
-        return self._get_values(wb.worksheets[6])
+        return self._get_values(wb.worksheets[5])
 
     def get_deltas_coverity_level_2(self):
         wb = load_workbook(self.filename)
-        return self._get_deltas(wb.worksheets[6])
+        return self._get_deltas(wb.worksheets[5])
 
     def get_values_security_level_1(self):
         wb = load_workbook(self.filename)
-        return self._get_values(wb.worksheets[7])
+        return self._get_values(wb.worksheets[6])
 
     def get_deltas_security_level_1(self):
         wb = load_workbook(self.filename)
-        return self._get_deltas(wb.worksheets[7])
+        return self._get_deltas(wb.worksheets[6])
 
     def get_history_security_level_1(self):
         wb = load_workbook(self.filename)
-        return self._get_history(wb.worksheets[7])
+        return self._get_history(wb.worksheets[6])
 
     def get_values_security_level_2(self):
         wb = load_workbook(self.filename)
-        return self._get_values(wb.worksheets[8])
+        return self._get_values(wb.worksheets[7])
 
     def get_deltas_security_level_2(self):
         wb = load_workbook(self.filename)
-        return self._get_deltas(wb.worksheets[8])
+        return self._get_deltas(wb.worksheets[7])
+
+    def get_history_security_level_2(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[7])
 
     def _create_workbook(self):
         wb = Workbook()
 
-        for index in range(9):
+        for index in range(8):
             if index != 0:
                 wb.create_sheet()
 
@@ -186,14 +203,6 @@ class QualityMetricsHistory:
         count_for_all_units = []
         for unit in self.unit_collection.units:
             count_for_unit = unit.get_latest_build_actual_warning_count()
-            count_for_all_units.append(count_for_unit)
-        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
-
-    def _fill_worksheet_total_warnings(self, worksheet, time_stamp):
-        count_for_all_units = []
-        for unit in self.unit_collection.units:
-            count_for_unit = unit.get_latest_build_suppressed_warning_count() + \
-                                  unit.get_latest_build_actual_warning_count()
             count_for_all_units.append(count_for_unit)
         self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
 
@@ -246,9 +255,9 @@ class QualityMetricsHistory:
         current_row = worksheet.max_row
 
         for index in range(len(self.unit_collection.units)+1):
-            current_column = index + 2
-            actual_value = worksheet.cell(current_row, current_column).value
             if current_row > 2:
+                current_column = index + 2
+                actual_value = worksheet.cell(current_row, current_column).value
                 previous_value = worksheet.cell(current_row - 1, current_column).value
                 deltas.append(actual_value - previous_value)
             else:
@@ -260,8 +269,8 @@ class QualityMetricsHistory:
         date_column = 1
         totals_column = len(self.unit_collection.units) + 2
 
-        for current_row in range(2, worksheet.max_row):
-            date = worksheet.cell(current_row, date_column).value
-            total = worksheet.cell(current_row, totals_column).value
+        for row in range(2, worksheet.max_row):
+            date = worksheet.cell(row, date_column).value
+            total = worksheet.cell(row, totals_column).value
             totals[date] = total
         return totals
