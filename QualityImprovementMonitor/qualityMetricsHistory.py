@@ -294,6 +294,7 @@ class QualityMetricsHistory:
         for row in range(2, worksheet.max_row):
             cell_value = worksheet.cell(row, date_column).value
 
+            # convert to datetime if date stored as string in excel sheet
             if isinstance(cell_value, str):
                 date = datetime.strptime(cell_value, self.date_format)
             else:
