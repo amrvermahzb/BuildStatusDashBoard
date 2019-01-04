@@ -44,6 +44,9 @@ class MainView:
         self.image_style = Style()
         self.image_style.configure("Image.TLabel", background="white")
 
+        self.title_style = Style()
+        self.title_style.configure("Table.TLabel", background="white")
+
         self.table_row_header_style = Style()
         self.table_row_header_style.configure("TableRowHeader.TLabel", foreground="black", background="white", font=self.small_font, width=25, anchor=W, border=1)
 
@@ -93,8 +96,8 @@ class MainView:
         label_security_burndown_graph.grid(row=2, column=3)
 
         # Warning info details
-        label_table = Label(label_content, style="Background.TLabel")
-        label_table.grid(row=4, column=1, columnspan=3)
+        label_table = Label(label_content, style="Table.TLabel")
+        label_table.grid(row=4, column=1, columnspan=3, pady=50)
 
         label_table_row_header_1 = Label(label_table, text="Treat warnings not as errors", style="TableRowHeader.TLabel")
         label_table_row_header_1.grid(row=2, column=1)
@@ -104,14 +107,22 @@ class MainView:
         label_table_row_header_2.grid(row=4, column=1)
         label_table_row_header_3 = Label(label_table, text="Actual warnings", style="TableRowHeader.TLabel")
         label_table_row_header_3.grid(row=5, column=1)
-        label_table_row_header_3 = Label(label_table, text="Coverity level 1", style="TableRowHeader.TLabel")
+
+        label_table_row_header_3 = Label(label_table, style="TableRowHeader.TLabel")
         label_table_row_header_3.grid(row=6, column=1)
-        label_table_row_header_3 = Label(label_table, text="Coverity level 2", style="TableRowHeader.TLabel")
+
+        label_table_row_header_3 = Label(label_table, text="Coverity level 1", style="TableRowHeader.TLabel")
         label_table_row_header_3.grid(row=7, column=1)
-        label_table_row_header_3 = Label(label_table, text="Security level 1", style="TableRowHeader.TLabel")
+        label_table_row_header_3 = Label(label_table, text="Coverity level 2", style="TableRowHeader.TLabel")
         label_table_row_header_3.grid(row=8, column=1)
-        label_table_row_header_3 = Label(label_table, text="Security level 2", style="TableRowHeader.TLabel")
+
+        label_table_row_header_3 = Label(label_table, style="TableRowHeader.TLabel")
         label_table_row_header_3.grid(row=9, column=1)
+
+        label_table_row_header_3 = Label(label_table, text="Security level 1", style="TableRowHeader.TLabel")
+        label_table_row_header_3.grid(row=10, column=1)
+        label_table_row_header_3 = Label(label_table, text="Security level 2", style="TableRowHeader.TLabel")
+        label_table_row_header_3.grid(row=11, column=1)
 
         current_column = 2
 
@@ -155,22 +166,22 @@ class MainView:
 
             # coverity level 1
             label_coverity_level_1_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
-            label_coverity_level_1_data.grid(row=6, column=current_column)
+            label_coverity_level_1_data.grid(row=7, column=current_column)
             self.labels_coverity_level_1_data.append(label_coverity_level_1_data)
 
             # coverity level 2
             self.label_coverity_level_2_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
-            self.label_coverity_level_2_data.grid(row=7, column=current_column)
+            self.label_coverity_level_2_data.grid(row=8, column=current_column)
             self.labels_coverity_level_2_data.append(self.label_coverity_level_2_data)
 
             # security level 1
             label_security_level_1_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
-            label_security_level_1_data.grid(row=8, column=current_column)
+            label_security_level_1_data.grid(row=10, column=current_column)
             self.labels_security_level_1_data.append(label_security_level_1_data)
 
             # security level 2
             self.label_security_level_2_data = Label(label_table, text="0", style="TableCellValueUnchanged.TLabel")
-            self.label_security_level_2_data.grid(row=9, column=current_column)
+            self.label_security_level_2_data.grid(row=11, column=current_column)
             self.labels_security_level_2_data.append(self.label_security_level_2_data)
 
             current_column += 1
@@ -207,8 +218,7 @@ class MainView:
         burn_down_end_value = 0
         data = self.qualityMetricsHistory.get_history_warning_suppression_indicator()
 
-        worksheet_name = self.qualityMetricsHistory.worksheet_names[4]
-        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_warning_burndown_graph)
+        self._generate_burn_down_chart("Compiler warning score", min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_warning_burndown_graph)
         self.image_warning_burndown_graph.configure(file=self.filename_warning_burndown_graph)
 
     def _update_coverity_burn_down_chart(self):
@@ -222,8 +232,7 @@ class MainView:
         burn_down_end_value = 0
         data = self.qualityMetricsHistory.get_history_coverity_level_1()
 
-        worksheet_name = self.qualityMetricsHistory.worksheet_names[5]
-        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_coverity_burndown_graph)
+        self._generate_burn_down_chart("Coverity level 1 errors", min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_coverity_burndown_graph)
         self.image_coverity_burndown_graph.configure(file=self.filename_coverity_burndown_graph)
 
     def _update_security_burn_down_chart(self):
@@ -237,11 +246,10 @@ class MainView:
         burn_down_end_value = 0
         data = self.qualityMetricsHistory.get_history_security_level_1()
 
-        worksheet_name = self.qualityMetricsHistory.worksheet_names[7]
-        self._generate_burn_down_chart(worksheet_name, min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_security_burndown_graph)
+        self._generate_burn_down_chart("Security level 1 errors", min_value, max_value, step, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, self.filename_security_burndown_graph)
         self.image_security_burndown_graph.configure(file=self.filename_security_burndown_graph)
 
-    def _generate_burn_down_chart(self, worksheet_name, min_y, max_y, step_y, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, graph_filename):
+    def _generate_burn_down_chart(self, name, min_y, max_y, step_y, burn_down_show, burn_down_begin_date, burn_down_begin_value, burn_down_end_date, burn_down_end_value, data, graph_filename):
         date_format = "%d-%b-%Y"
 
         plt.clf()
@@ -261,8 +269,7 @@ class MainView:
 
         # plot labels
         plt.xlabel('Date')
-        plt.ylabel(worksheet_name)
-        plt.title(worksheet_name)
+        plt.title(name)
 
         # plot ticks
         years = mdates.YearLocator()  # every year

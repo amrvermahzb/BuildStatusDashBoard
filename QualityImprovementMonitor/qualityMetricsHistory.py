@@ -40,6 +40,7 @@ class QualityMetricsHistory:
 
         print("end update history")
 
+    # wrong warning level
     def get_values_wrong_warning_level(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[0])
@@ -52,6 +53,7 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_history(wb.worksheets[0])
 
+    # treat warning not as errors
     def get_values_treat_warnings_not_as_errors(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[1])
@@ -64,6 +66,7 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_history(wb.worksheets[1])
 
+    # suppressed warnings
     def get_values_suppressed_warnings(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[2])
@@ -76,6 +79,7 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_history(wb.worksheets[2])
 
+    # actual warnings
     def get_values_actual_warnings(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[3])
@@ -88,6 +92,7 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_history(wb.worksheets[3])
 
+    # warnings metric
     def get_history_warning_suppression_indicator(self):
         totals = {}
 
@@ -111,6 +116,7 @@ class QualityMetricsHistory:
 
         return totals
 
+    # coverity
     def get_values_coverity_level_1(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[4])
@@ -131,6 +137,11 @@ class QualityMetricsHistory:
         wb = load_workbook(self.filename)
         return self._get_deltas(wb.worksheets[5])
 
+    def get_history_coverity_level_2(self):
+        wb = load_workbook(self.filename)
+        return self._get_history(wb.worksheets[5])
+
+    # security
     def get_values_security_level_1(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[6])
@@ -258,8 +269,18 @@ class QualityMetricsHistory:
             if current_row > 2:
                 current_column = index + 2
                 actual_value = worksheet.cell(current_row, current_column).value
-                previous_value = worksheet.cell(current_row - 1, current_column).value
-                deltas.append(actual_value - previous_value)
+
+                delta = 0
+                days_look_back = 1
+
+                row = current_row
+                while delta == 0 and row > 2 and days_look_back > 0:
+                    row -= 1
+                    days_look_back -= 1
+                    previous_value = worksheet.cell(row, current_column).value
+                    delta = actual_value - previous_value
+
+                deltas.append(delta)
             else:
                 deltas.append(0)
         return deltas
