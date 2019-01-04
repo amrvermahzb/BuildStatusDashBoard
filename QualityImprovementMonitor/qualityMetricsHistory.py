@@ -13,15 +13,16 @@ class QualityMetricsHistory:
         self.filename = r'QualityMetricsHistory.xlsx'
         self.worksheet_names = ["Wrong warning level", "Treat warning not as error", "Suppressed warnings", "Actual warnings", "Coverity level 1", "Coverity level 2", "Security level 1", "Security level 2"]
 
+        self.date_format = "%d-%b-%Y"
+
         if not os.path.isfile(self.filename):
             self._create_workbook()
 
     def update(self):
         print("begin update history")
 
-        date_format = "%d-%b-%Y"
         today = date.today()
-        time_stamp = today.strftime(date_format)
+        time_stamp = today.strftime(self.date_format)
 
         for unit in self.unit_collection.units:
             unit.update_path_last_successful_build()
@@ -291,7 +292,13 @@ class QualityMetricsHistory:
         totals_column = len(self.unit_collection.units) + 2
 
         for row in range(2, worksheet.max_row):
-            date = worksheet.cell(row, date_column).value
+            cell_value = worksheet.cell(row, date_column).value
+
+            if isinstance(cell_value, str):
+                date = datetime.strptime(cell_value, self.date_format)
+            else:
+                date = cell_value
+
             total = worksheet.cell(row, totals_column).value
             totals[date] = total
         return totals

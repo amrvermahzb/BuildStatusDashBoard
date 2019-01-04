@@ -259,7 +259,14 @@ class MainView:
         max_x = datetime.strptime(self.chart_end_date, date_format)
         plt.xlim(min_x, max_x)
 
-        plt.plot_date(data.keys(), data.values(), "-")
+        dates = []
+        values = []
+        for key, value in sorted(data.items()):
+            dates.append(key)
+            values.append(value)
+
+
+        plt.plot_date(dates, values, "-")
 
         # plot burn down
         if burn_down_show:
