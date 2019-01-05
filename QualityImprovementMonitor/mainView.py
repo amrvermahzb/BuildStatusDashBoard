@@ -51,16 +51,16 @@ class MainView:
         self.table_row_header_style.configure("TableRowHeader.TLabel", foreground="black", background="white", font=self.small_font, width=25, anchor=W, border=1)
 
         self.table_column_header_style = Style()
-        self.table_column_header_style.configure("TableColumnHeader.TLabel", foreground="black", background="white", font=self.small_font_bold, width=8, anchor=CENTER, border=1)
+        self.table_column_header_style.configure("TableColumnHeader.TLabel", foreground="black", background="white", font=self.small_font_bold, width=6, anchor=CENTER, border=1)
 
         self.table_cell_value_up_style = Style()
-        self.table_cell_value_up_style.configure("TableCellValueUp.TLabel", foreground="white", background="red", font=self.small_font, width=8, anchor=CENTER, border=1)
+        self.table_cell_value_up_style.configure("TableCellValueUp.TLabel", foreground="white", background="red", font=self.small_font, width=6, anchor=CENTER, border=1)
 
         self.table_cell_value_down_style = Style()
-        self.table_cell_value_down_style.configure("TableCellValueDown.TLabel", foreground="white", background="green", font=self.small_font, width=8, anchor=CENTER, border=1)
+        self.table_cell_value_down_style.configure("TableCellValueDown.TLabel", foreground="white", background="green", font=self.small_font, width=6, anchor=CENTER, border=1)
 
         self.table_cell_value_unchanged_style = Style()
-        self.table_cell_value_unchanged_style.configure("TableCellValueUnchanged.TLabel", foreground="gray", background="white", font=self.extra_small_font, width=8, anchor=CENTER, border=1)
+        self.table_cell_value_unchanged_style.configure("TableCellValueUnchanged.TLabel", foreground="gray", background="white", font=self.extra_small_font, width=6, anchor=CENTER, border=1)
 
         print("begin layout ui")
 
@@ -289,7 +289,7 @@ class MainView:
         plt.yticks(np.arange(min_y, max_y, step=step_y))
 
         # save image
-        plt.savefig(graph_filename, bbox_inches='tight', dpi=100)
+        plt.savefig(graph_filename, bbox_inches='tight', dpi=90)
 
     def _update_table_values(self):
         for index in range(len(self.unit_collection.units) + 1):

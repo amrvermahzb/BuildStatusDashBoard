@@ -272,7 +272,7 @@ class QualityMetricsHistory:
                 actual_value = worksheet.cell(current_row, current_column).value
 
                 delta = 0
-                days_look_back = 1
+                days_look_back = 4
 
                 row = current_row
                 while delta == 0 and row > 2 and days_look_back > 0:
