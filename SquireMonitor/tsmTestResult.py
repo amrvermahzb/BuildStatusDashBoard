@@ -12,9 +12,9 @@ class TsmTestResult(TestResult):
     def get_latest_result(self):
         if os.path.isfile(self.resultFile):
             root = ET.parse(self.resultFile).getroot()
-            for item in root.iter():
-                if item.tag == "OverallResult":
-                    return item.text
+            for item in root.iter('test-suite'):
+                if item.get('name') == "TsmUI_Automation":
+                    return item.get('result')
             return "Not found"
         else:
             return "Not found"
