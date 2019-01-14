@@ -40,13 +40,15 @@ class Build:
     def get_latest_build_result(self):
         filename = self.get_build_log_file()
 
-        with open(filename) as f:
-            content = f.readlines()
         result = "failed"
+        if os.path.exists(filename):
+            with open(filename) as f:
+                content = f.readlines()
 
-        for line in content:
-            if "overall-result" in line:
-                if "success" in line:
-                    result = "successful"
+            for line in content:
+                if "overall-result" in line:
+                    if "success" in line:
+                        result = "successful"
+
         return result
 
