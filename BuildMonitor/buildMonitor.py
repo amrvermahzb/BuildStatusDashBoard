@@ -7,6 +7,7 @@ class BuildMonitor:
         self.Units = []
         self.Units.append(Unit("Acq"))
         self.Units.append(Unit("AUI"))
+        self.Units.append(Unit("FSFW"))
         self.Units.append(Unit("FSSys"))
         self.Units.append(Unit("HostSW"))
         self.Units.append(Unit("IDClient"))
