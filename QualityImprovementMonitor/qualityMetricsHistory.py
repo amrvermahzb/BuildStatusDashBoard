@@ -11,7 +11,7 @@ class QualityMetricsHistory:
     def __init__(self, unit_collection):
         self.unit_collection = unit_collection
         self.filename = r'QualityMetricsHistory.xlsx'
-        self.worksheet_names = ["Wrong warning level", "Treat warning not as error", "Suppressed warnings", "Actual warnings", "Coverity level 1", "Coverity level 2", "Security level 1", "Security level 2"]
+        self.worksheet_names = ["Wrong warning level", "Treat warning not as error", "Suppressed warnings", "Actual warnings", "Coverity level 1", "Coverity level 2", "Security level 1", "Security level 2","TQI","tqiAbstrInt","tqiCompWarn","tqiCodingStd","tqiDupCode","tqiDeadCode","tqiSecurity","loc"]
 
         self.date_format = "%d-%b-%Y"
 
@@ -26,9 +26,11 @@ class QualityMetricsHistory:
 
         for unit in self.unit_collection.units:
             unit.update_path_last_successful_build()
-
+        
         wb = load_workbook(self.filename)
+        print('The file is ',self.filename,wb.worksheets[0],wb.worksheets[12])
         self._fill_worksheet_wrong_warning_level(wb.worksheets[0], time_stamp)
+       
         self._fill_worksheet_treat_warnings_not_as_errors(wb.worksheets[1], time_stamp)
         self._fill_worksheet_suppressed_warnings(wb.worksheets[2], time_stamp)
         self._fill_worksheet_actual_warnings(wb.worksheets[3], time_stamp)
@@ -36,6 +38,19 @@ class QualityMetricsHistory:
         self._fill_worksheet_coverity_warnings(wb.worksheets[5], time_stamp, 2)
         self._fill_worksheet_security_warnings(wb.worksheets[6], time_stamp, 1)
         self._fill_worksheet_security_warnings(wb.worksheets[7], time_stamp, 2)
+        
+        
+        #####################
+        self._fill_worksheet_TQI(wb.worksheets[8], time_stamp)
+        self._fill_worksheet_tqiAbstrInt(wb.worksheets[9], time_stamp)
+        self._fill_worksheet_tqiCompWarn(wb.worksheets[10], time_stamp)
+        self._fill_worksheet_tqiCodingStd(wb.worksheets[11], time_stamp)
+        self._fill_worksheet_tqiDupCode(wb.worksheets[12], time_stamp)
+        self._fill_worksheet_tqiDeadCode(wb.worksheets[13], time_stamp)
+        self._fill_worksheet_tqiSecurity(wb.worksheets[14], time_stamp)
+        self._fill_worksheet_loc(wb.worksheets[15], time_stamp)
+        
+        #####################
 
         wb.save(self.filename)
 
@@ -118,6 +133,22 @@ class QualityMetricsHistory:
         return totals
 
     # coverity
+    
+    ####  Implemented by Amrendra verma 
+    ###   we need a com
+    def get_values_of_worksheet_lastrow(self,Worksheet_nm):
+        wb = load_workbook(self.filename)
+        wrksheetIdx=self.worksheet_names.index(Worksheet_nm)
+        #print('worksheet name = ',Worksheet_nm)
+        #print(' index = ',wrksheetIdx)
+        return self._get_values(wb.worksheets[wrksheetIdx])
+        
+    def get_deltas_of_worksheet_lastrow(self,Worksheet_nm):
+        wb = load_workbook(self.filename)
+        wrksheetIdx=self.worksheet_names.index(Worksheet_nm)
+        return self._get_deltas(wb.worksheets[wrksheetIdx])
+    
+    ########################################
     def get_values_coverity_level_1(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[4])
@@ -154,7 +185,12 @@ class QualityMetricsHistory:
     def get_history_security_level_1(self):
         wb = load_workbook(self.filename)
         return self._get_history(wb.worksheets[6])
-
+    #############Amrendra ###########
+    def get_history_of_type_in_par(self,errortype):
+        wb = load_workbook(self.filename)
+        idx=self.worksheet_names.index(errortype)
+        return self._get_history(wb.worksheets[idx])
+    ########################
     def get_values_security_level_2(self):
         wb = load_workbook(self.filename)
         return self._get_values(wb.worksheets[7])
@@ -170,7 +206,7 @@ class QualityMetricsHistory:
     def _create_workbook(self):
         wb = Workbook()
 
-        for index in range(8):
+        for index in range(16):
             if index != 0:
                 wb.create_sheet()
 
@@ -223,7 +259,7 @@ class QualityMetricsHistory:
         for unit in self.unit_collection.units:
             count_for_unit = unit.get_latest_build_coverity_error_count(level)
             count_for_all_units.append(count_for_unit)
-
+        print('--- PROB1',count_for_all_units)
         self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
 
     def _fill_worksheet_security_warnings(self, worksheet, time_stamp, level):
@@ -233,6 +269,71 @@ class QualityMetricsHistory:
             count_for_all_units.append(count_for_unit)
 
         self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+    ##################################
+    def _fill_worksheet_TQI(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('tqi')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+    def _fill_worksheet_tqiAbstrInt(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('tqiAbstrInt')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+    def _fill_worksheet_tqiCompWarn(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('tqiCompWarn')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+    
+    def _fill_worksheet_tqiCodingStd(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('tqiCodingStd')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+        
+    def _fill_worksheet_tqiDupCode(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('tqiDupCode')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+        
+    def _fill_worksheet_tqiDeadCode(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('tqiDeadCode')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+        
+        
+    def _fill_worksheet_tqiSecurity(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('tqiSecurity')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+        
+    def _fill_worksheet_loc(self, worksheet, time_stamp):
+        count_for_all_units = []
+        for unit in self.unit_collection.units:
+            count_for_unit = unit.get_latest_build_tictype_count('loc')
+            count_for_all_units.append(count_for_unit)
+        self._fill_worksheet(worksheet, time_stamp, count_for_all_units)
+        
+    ##################################
 
     def _fill_worksheet(self, worksheet, time_stamp, count_for_all_units):
         current_column = 1
@@ -245,7 +346,10 @@ class QualityMetricsHistory:
         total = 0
         worksheet.cell(current_row, current_column).value = time_stamp
         current_column += 1
+        print(' PROB2 ',count_for_all_units)
         for count in count_for_all_units:
+            if count is None:
+             continue
             total += count
             worksheet.cell(current_row, current_column).value = count
             current_column += 1
@@ -279,6 +383,10 @@ class QualityMetricsHistory:
                     row -= 1
                     days_look_back -= 1
                     previous_value = worksheet.cell(row, current_column).value
+                    if previous_value is None :
+                     continue
+                    if actual_value is None :
+                     continue
                     delta = actual_value - previous_value
 
                 deltas.append(delta)
@@ -291,7 +399,7 @@ class QualityMetricsHistory:
         date_column = 1
         totals_column = len(self.unit_collection.units) + 2
 
-        for row in range(2, worksheet.max_row):
+        for row in range(2, worksheet.max_row+1):
             cell_value = worksheet.cell(row, date_column).value
 
             # convert to datetime if date stored as string in excel sheet
@@ -301,5 +409,9 @@ class QualityMetricsHistory:
                 date = cell_value
 
             total = worksheet.cell(row, totals_column).value
-            totals[date] = total
+            totals[date.date()] = total
+            print('@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+            print(date)
+            print(total)
+            print('@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         return totals

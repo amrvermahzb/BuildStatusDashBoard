@@ -44,9 +44,19 @@ class Unit:
     def get_latest_build_security_error_count(self, level):
         report = TicsMetricsReport(self.unit_name)
         return report.get_security_errors(level)
+        
+    ########################################
+    def get_latest_build_tictype_count(self,tictype):
+        report = TicsMetricsReport(self.unit_name)
+        return report.get_count_of_errotype(tictype)
+    
+    ########################################
 
     def _get_latest_build_warning_setting_report(self):
-        filename = self.last_successful_build_path + r'\Logging\GENERATE\warning_settings_report.xml'
+         #AMR path='C:\Python_Proj\warning_settings_report.xml'
+         #Amr return WarningSettingsReport(path)
+    
+        filename = self.last_successful_build_path + '\Logging\INSPECT\warning_settings_report.xml'
         return WarningSettingsReport(filename)
 
     def _get_latest_build_actual_warnings_report(self):
@@ -76,6 +86,7 @@ class Unit:
     def _get_build_directory_root(self):
         stream_name = r'Allura_Main_' + self.unit_name + r'_PreInt'
         build_path = os.path.join(BUILD_BASE_PATH, self.unit_name, stream_name)
+        #print(' The Stream build path is = ',build_path)
         if not os.path.isdir(build_path):
             build_path = "dir not found"
         return build_path

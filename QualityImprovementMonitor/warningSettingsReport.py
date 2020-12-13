@@ -14,7 +14,7 @@ class WarningSettingsReport:
         self.source_files_with_wrong_warning_level = 0
         self.source_files_with_disabled_warnings = 0
         self.source_files_with_deprecated_code = 0
-
+       
         if os.path.isfile(filename):
             tree = ET.parse(filename)
             root = tree.getroot()
@@ -22,9 +22,11 @@ class WarningSettingsReport:
             attribute_name = "errors"
             element = root.find("{urn:dsi-schema}ProjectFilesWithWrongWarningLevel")
             self.project_files_with_wrong_warning_level = int(element.attrib[attribute_name])
-
+            print(' Amr1 self.project_files_with_wrong_warning_level ',self.project_files_with_wrong_warning_level)
+            
             element = root.find("{urn:dsi-schema}ProjectFilesWhichTreatWarningsNotAsErrors")
             self.project_files_which_treat_warnings_not_as_errors = int(element.attrib[attribute_name])
+            print(' Amr2 self.project_files_which_treat_warnings_not_as_errors ',self.project_files_which_treat_warnings_not_as_errors)
 
             element = root.find("{urn:dsi-schema}ProjectFilesWithDisabledWarningCatagories")
             self.project_files_with_disabled_warning_catagories = int(element.attrib[attribute_name])
@@ -42,13 +44,16 @@ class WarningSettingsReport:
             self.source_files_with_deprecated_code = int(element.attrib[attribute_name])
 
     def get_wrong_warning_level_count(self):
+        #print(' Amr3 self.project_files_which_treat_warnings_not_as_errors ',self.project_files_with_wrong_warning_level)
         return self.project_files_with_wrong_warning_level + \
                self.source_files_with_wrong_warning_level
 
     def get_treat_warnings_not_as_errors_count(self):
+        #print(' Amr4 self.project_files_which_treat_warnings_not_as_errors ',self.project_files_which_treat_warnings_not_as_errors)
         return self.project_files_which_treat_warnings_not_as_errors
 
     def get_suppressed_warning_count(self):
+        #print(' Amr5 self.project_files_which_treat_warnings_not_as_errors ',self.project_files_which_treat_warnings_not_as_errors)
         return self.project_files_with_disabled_warning_catagories + \
                self.project_files_with_disabled_warnings + \
                self.source_files_with_disabled_warnings + \
